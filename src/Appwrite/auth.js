@@ -5,8 +5,9 @@ export class AuthService{
     client = new Client();
     account;
     constructor(){
-        this.client.setEndpoint(conf.appwriteUrl)
-        .setProject(conf.appwriteProjectId)
+        this.client
+        .setEndpoint(conf.appwriteUrl)
+        .setProject(conf.appwriteProjectId);
         this.account=new Account(this.client);
     }
 
@@ -14,17 +15,17 @@ export class AuthService{
     async createAccount({email, password, name}){
         try {
             
-            const userAccount = await account.create(
+            const userAccount = await this.account.create(
                     ID.unique(), 
                     email,
                     password,
                         name
                 );
-            if(userAccount){
-                return this.login({email, password});
-            }else{
-                return  userAccount;
-            }     
+           if (userAccount) {
+    return this.login({email, password});
+}
+return userAccount;
+   
         } catch (error) {
               throw error;
         }
@@ -32,10 +33,10 @@ export class AuthService{
 
     //login method 
 
-    async login(){
+    async login({email,password}){
         try {
            return  await account.createEmailPasswordSession(
-    email, 
+        email, 
     password
 );
         } catch (error) {
@@ -47,8 +48,9 @@ export class AuthService{
     //get current user 
     async getCurrentUser(){
        try {
-    const user = await account.get();
-    // Logged in
+    const user = await this.account.get();
+    
+    return user;
 } catch (err) {
     // Not logged in
 
