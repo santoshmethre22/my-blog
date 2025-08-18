@@ -15,17 +15,14 @@ export class AuthService{
     async createAccount({email, password, name}){
         try {
             
-            const userAccount = await this.account.create(
-                    ID.unique(), 
-                    email,
-                    password,
-                        name
-                );
-           if (userAccount) {
-    return this.login({email, password});
-}
-return userAccount;
-   
+              const userAccount = await this.account.create(
+                ID.unique(),
+                email,
+                password,
+                name
+            );
+            return await this.login({ email, password });
+        return userAccount;
         } catch (error) {
               throw error;
         }
@@ -35,7 +32,7 @@ return userAccount;
 
     async login({email,password}){
         try {
-           return  await account.createEmailPasswordSession(
+           return  await this.account.createEmailPasswordSession(
         email, 
     password
 );
